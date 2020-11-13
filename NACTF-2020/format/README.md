@@ -78,7 +78,7 @@ The program's ``check_num`` function will always fail and we'll never get the fl
 * Calling ``check_num``, loading the secret again but comparing it with the result of ``num+0x42`` (or, ``goal`` in the source code)
 * Obviously ``num`` !== ``num+0x42`` so the program fails
 
-Inside ``check_num``, the ``if (num != goal) {`` statement determines whether we're getting the flag or not.
+Inside ``check_num``, the ``if (num != goal)`` statement determines whether we're getting the flag or not.
 
 After having a closer look at it in gdb, this is how it looks like:
 
