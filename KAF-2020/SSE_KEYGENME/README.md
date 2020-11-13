@@ -66,12 +66,12 @@ Padding is kinda boring, so I'll jump straight to the interesting steps: Shuffli
 
 ### Step 2 - Shuffling
 
-The program takes the first 16 bytes of the input(block of 128 bits) and shuffles the order of the characters using the ``pshufb``:
+The program takes the first 16 bytes of the input(block of 128 bits) and shuffles the order of the characters using the ``pshufb`` instruction:
 1. First, the program "generates" a 16-byte variable using the following instructions sequence:
 
 ![image1](./images/0x01.png)
 
-The program is doing a lot of repetative left shifting until it completes a full 128bit block.(which is made out of ``0x01``s).
+It's doing a lot of repetative left shifting until it completes a full 128bit block.(which is made out of ``0x01``s).
 
 Essentially, the following one-liner will yield the same result: ``some_var = 0x01010101010101010101010101010101``. 
 
@@ -88,6 +88,8 @@ p_box "masked":  0x308090c0e0a070f02050b000d040601
 ```
 
 3. It's using the result(``0x308090c0e0a070f02050b000d040601``) as the **shuffle map** when the shuffle is performed. If you're wondering how the ``pshufb`` instruction works and what exactly that map is: you should check out the URLs in the "Prerequisites" section above.
+
+![image3](./images/vpshufb.png)
 
 
 ### Step 3 - XORing
