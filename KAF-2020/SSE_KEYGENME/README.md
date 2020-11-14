@@ -46,7 +46,8 @@ This write-up covers the 2nd approach.
 
 ## Prerequisites
 In order to read this writeup without being too frustrated, you'll need to understand:
-* A little bit about [Concepts of Substitution–permutation Networks](https://www.youtube.com/watch?v=DLjzI5dX8jc) . In the binary, it is implemented using the variables ``p_box`` and ``x_box`` (which are also mentioned in this video. Referred as "*S box* and *X box*")
+* A little bit about the [Concepts of Substitution–permutation Networks](https://www.youtube.com/watch?v=DLjzI5dX8jc) . In the binary, it is implemented using the variables ``p_box`` and ``x_box`` (which are also mentioned in this video. Referred as "*S box* and *X box*")
+  * More background here: http://www.eng.tau.ac.il/~yash/crypto-netsec/blockciphers1.htm
 * Basic stuff about SSE registers (being familiar with ``xmm0``, ``xmm1`` registers is enough)
 * ``pshufb`` instruction(awesome demo at 8:05): https://www.youtube.com/watch?v=rBYrQ1OEhik
 
@@ -180,5 +181,5 @@ plaintext: KAF{F0R_0LD_T1M3S_S4K3}
 
 When I solved this challenge, I didn't know why my decryption script f**ked up and showed only part of the flag. It was really weird.
 
-After the CTF ended, I showed @lior5654 (random dude I found on the discord channel) my solution and he said that I was actually on the right track. **However**, I used the wrong endianness + flipped the array indexes when trying to recover the permutation, it created a weird output that might look like the flag, but not exactly the flag (more like a drunk flag lol). So thanks for taking the time to correct my (shitty) python syntax at the middle of the night :D 
+After the CTF ended, I showed [@lior5654](https://dsc.bio/lior) (random dude I found on the discord channel) my solution and he said that I was actually on the right track. **However**, I used the wrong endianness + flipped the array indexes when trying to recover the permutation, it created a weird output that might look like the flag, but not exactly the flag (more like a drunk flag lol). So thanks for taking the time to correct my (shitty) python syntax at the middle of the night :D 
 
