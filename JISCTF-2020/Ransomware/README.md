@@ -23,7 +23,7 @@ Error opening the file
 ```
 This happens because it looks for a file called ``flag.txt`` in the current directory:
 
-![img1](./images/0-open.png)
+<img src='./images/0-open.png' height=600/>
 
 The program opens it, reads ``0x23`` bytes and put it on the stack (at ``[rbp+inputStack]``).
 
