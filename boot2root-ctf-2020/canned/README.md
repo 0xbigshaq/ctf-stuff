@@ -21,7 +21,8 @@ What are we working with:
 Obstacles:
 * The binary has NX protection enabled
 * Stack canary protection is also enabled(libc's ``FORTIFY`` stuff) which prevents ``RIP`` takeover via the stack.
-* The address of libc is randomized so we cannot know where to jump even if we manage to leak the stack canary and takeover ``RIP``.
+* The address of libc is randomized(ASLR) so we cannot know where to jump even if we manage to leak the stack canary and takeover ``RIP``.
+* We don't know the version of libc on the target server
 
 # Solution
 
