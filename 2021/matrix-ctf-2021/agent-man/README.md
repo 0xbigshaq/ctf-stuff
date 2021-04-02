@@ -20,7 +20,7 @@ Explanation is below
 
 I'll break the screenshot above into 4 'components':
 * **(1) The Algo**: This is a typical XOR cipher 
-* **(2) The Flag**: This flag is hidden inside ``digDeeper.jpg`` (provided as a parameter to the decryption native method)
+* **(2) The Flag**: This flag is hidden inside ``digDeeper.jpg`` (provided as a parameter to the ``agentMan()`` native function)
 * **(3) The Key**: In the first few lines of the disassembly, the apk loads a constant variable(``DAT_0012c9a0``) and copies ``0xa8`` bytes of it using ``memcpy``. This will be our XOR key (``A5 00 00 00 BC ...``).
 ![img-2](./screenshots/2.png)
 * **(4) The Implementation**: This part was kinda trickey. The author of the challenge didn't want to make it too obvious and put the encrypted flag characters one after another somewhere in the jpg file. Instead, the flag's characters were being spread out all over the jpg file. one character for every 7401(``0x1CE9``) bytes of binary data. 
