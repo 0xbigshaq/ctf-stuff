@@ -4,11 +4,13 @@
 
 ![./screenshots/0.png](./screenshots/0.png)
 
+We were given a server(and a sample ELF file), containing a roulette game. If we guess correctly every round & win enough points - we'll get the flag.
+
 # Solution
 
 The intended solution involves integer overflow, insecure PRNG & leaking values using another bug(format string).
 
-However, during the CTF, I found an un-intended pathway to exploit the roulette game & get the flag  
+However, during the CTF, I found an un-intended pathway to exploit the roulette game & get the flag.
 
 ```py
 #!/usr/bin/env python
