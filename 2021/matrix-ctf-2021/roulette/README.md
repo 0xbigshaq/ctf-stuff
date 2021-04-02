@@ -47,9 +47,11 @@ io.recvuntil('Won')
 io.interactive()
 ```
 
-The format string payload(in ``num_rounds``) will overwrite the 'score' pointer on the heap with the value ``10000001``
+The format string payload(in ``num_rounds``) will overwrite the 'score' pointer on the heap with the value ``10000001``, allowing us to affect the ``jle`` instruction(below).
 
 ![./screenshots/1.png](./screenshots/1.png)
+
+If the jump will not be taken, we will win the game & get the flag.
 
 output from server:
 ```
