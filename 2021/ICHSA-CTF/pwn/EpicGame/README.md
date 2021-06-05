@@ -258,6 +258,8 @@ Even though ``PIE`` is disabled on the challenge binary itself, this is not a st
 
 Using the leak of the 'lucky number' (described in _Analysis_), we can determine the libc version on the remote server. This can be done using libc database tools such as [niklasb/libc-database](https://github.com/niklasb/libc-database) and [libc.blukat.me](https://libc.blukat.me/).
 
+>**Note**: After finishing the challenge, I noticed we didn't had to recognize & download the right libc version in a blackbox perspective using leaks. That's because the docker container(provided in the challenge zip file) already has a copy of it. That was a painful lesson, but it's part of the adventure I guess. I hope you learned something new.
+
 After downloading the relevant ``.so`` file, we can open it in ``pwntools`` in order to calculate the base address of libc. And from there, adding offsets to discover where ``system`` is located.
 
 
