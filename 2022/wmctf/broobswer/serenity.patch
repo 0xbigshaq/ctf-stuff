@@ -1,0 +1,97 @@
+diff --git a/AK/ByteBuffer.h b/AK/ByteBuffer.h
+index 43dec2cc58..7857d83d97 100644
+--- a/AK/ByteBuffer.h
++++ b/AK/ByteBuffer.h
+@@ -156,6 +156,11 @@ public:
+         MUST(try_resize(new_size));
+     }
+ 
++    ALWAYS_INLINE void unsafe_resize(size_t new_size)
++    {
++        m_size = new_size;
++    }
++
+     ALWAYS_INLINE void ensure_capacity(size_t new_capacity)
+     {
+         MUST(try_ensure_capacity(new_capacity));
+diff --git a/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.cpp b/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.cpp
+index 463d944c48..16ca83d503 100644
+--- a/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.cpp
++++ b/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.cpp
+@@ -25,7 +25,7 @@ void ArrayBufferPrototype::initialize(GlobalObject& global_object)
+     Object::initialize(global_object);
+     u8 attr = Attribute::Writable | Attribute::Configurable;
+     define_native_function(vm.names.slice, slice, 2, attr);
+-    define_native_accessor(vm.names.byteLength, byte_length_getter, {}, Attribute::Configurable);
++    define_native_accessor(vm.names.byteLength, byte_length_getter, byte_length_setter, Attribute::Configurable);
+ 
+     // 25.1.5.4 ArrayBuffer.prototype [ @@toStringTag ], https://tc39.es/ecma262/#sec-arraybuffer.prototype-@@tostringtag
+     define_direct_property(*vm.well_known_symbol_to_string_tag(), js_string(vm, vm.names.ArrayBuffer.as_string()), Attribute::Configurable);
+@@ -141,4 +141,16 @@ JS_DEFINE_NATIVE_FUNCTION(ArrayBufferPrototype::byte_length_getter)
+     return Value(length);
+ }
+ 
++JS_DEFINE_NATIVE_FUNCTION(ArrayBufferPrototype::byte_length_setter)
++{
++    auto* array_buffer_object = TRY(typed_this_value(global_object));
++
++    if (array_buffer_object->is_detached())
++        return Value(0);
++
++    array_buffer_object->buffer().unsafe_resize(0x3341);
++
++    return js_undefined();
++}
++
+ }
+diff --git a/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.h b/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.h
+index 2baae73737..f3e3248d98 100644
+--- a/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.h
++++ b/Userland/Libraries/LibJS/Runtime/ArrayBufferPrototype.h
+@@ -22,6 +22,7 @@ public:
+ private:
+     JS_DECLARE_NATIVE_FUNCTION(slice);
+     JS_DECLARE_NATIVE_FUNCTION(byte_length_getter);
++    JS_DECLARE_NATIVE_FUNCTION(byte_length_setter);
+ };
+ 
+ }
+diff --git a/Userland/Utilities/js.cpp b/Userland/Utilities/js.cpp
+index 375efd69ce..7814471b75 100644
+--- a/Userland/Utilities/js.cpp
++++ b/Userland/Utilities/js.cpp
+@@ -970,6 +970,7 @@ static void print_string_object(JS::StringObject const& string_object, HashTable
+ 
+ static void print_value(JS::Value value, HashTable<JS::Object*>& seen_objects)
+ {
++    return;
+     if (value.is_empty()) {
+         js_out("\033[34;1m<empty>\033[0m");
+         return;
+@@ -1292,14 +1293,9 @@ static JS::ThrowCompletionOr<JS::Value> load_json_impl(JS::VM& vm, JS::GlobalObj
+ void ReplObject::initialize_global_object()
+ {
+     Base::initialize_global_object();
+-    define_direct_property("global", this, JS::Attribute::Enumerable);
+     u8 attr = JS::Attribute::Configurable | JS::Attribute::Writable | JS::Attribute::Enumerable;
+     define_native_function("exit", exit_interpreter, 0, attr);
+     define_native_function("help", repl_help, 0, attr);
+-    define_native_function("save", save_to_file, 1, attr);
+-    define_native_function("loadINI", load_ini, 1, attr);
+-    define_native_function("loadJSON", load_json, 1, attr);
+-    define_native_function("print", print, 1, attr);
+ 
+     define_native_accessor(
+         "_",
+@@ -1369,11 +1365,6 @@ JS_DEFINE_NATIVE_FUNCTION(ReplObject::print)
+ void ScriptObject::initialize_global_object()
+ {
+     Base::initialize_global_object();
+-    define_direct_property("global", this, JS::Attribute::Enumerable);
+-    u8 attr = JS::Attribute::Configurable | JS::Attribute::Writable | JS::Attribute::Enumerable;
+-    define_native_function("loadINI", load_ini, 1, attr);
+-    define_native_function("loadJSON", load_json, 1, attr);
+-    define_native_function("print", print, 1, attr);
+ }
+ 
+ JS_DEFINE_NATIVE_FUNCTION(ScriptObject::load_ini)
